@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Gateway - Space Theme</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0a0a2a, #1a1a4a, #0a0a2a);
+            color: #ffffff;
+            min-height: 100vh;
+            padding: 20px;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(white, rgba(255,255,255,.2) 2px, transparent 4px),
+                radial-gradient(white, rgba(255,255,255,.15) 1px, transparent 3px),
+                radial-gradient(white, rgba(255,255,255,.1) 2px, transparent 4px);
+            background-size: 550px 550px, 350px 350px, 250px 250px;
+            background-position: 0 0, 40px 60px, 130px 270px;
+            z-index: -1;
+        }
+
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            background: rgba(16, 16, 48, 0.85);
+            border-radius: 20px;
+            padding: 25px;
+            border: 2px solid #00ffff;
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.3);
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, transparent 30%, rgba(0, 255, 255, 0.1) 70%);
+            animation: float 8s ease-in-out infinite;
+            z-index: -1;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+
+        .profile-section {
+            text-align: center;
+            margin-bottom: 25px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .profile-image {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 3px solid #ffffff;
+            box-shadow: 0 0 20px #ffffff, 0 0 30px #00ffff;
+            margin: 0 auto 15px;
+            background: #000;
+            padding: 5px;
+            overflow: hidden;
+        }
+
+        .profile-image img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        h1 {
+            color: #00ffff;
+            text-align: center;
+            margin-bottom: 25px;
+            font-size: 24px;
+            text-shadow: 0 0 10px #00ffff;
+            position: relative;
+            z-index: 2;
+        }
+
+        .section-title {
+            color: #00ff00;
+            margin: 20px 0 15px;
+            font-size: 18px;
+            text-shadow: 0 0 5px #00ff00;
+            position: relative;
+            z-index: 2;
+            padding-bottom: 5px;
+            border-bottom: 1px solid rgba(0, 255, 255, 0.3);
+        }
+
+        .payment-methods {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .payment-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 12px;
+            text-align: center;
+            border: 1px solid #00ffff;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .payment-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 255, 255, 0.4);
+        }
+
+        .payment-logo {
+            width: 50px;
+            height: 50px;
+            margin: 0 auto 10px;
+            border-radius: 10px;
+            background: white;
+            padding: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .payment-logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .payment-number {
+            font-size: 12px;
+            color: #ffffff;
+            word-break: break-all;
+            margin-top: 5px;
+        }
+
+        .copy-text {
+            color: #ff9900;
+            font-size: 12px;
+            margin-top: 8px;
+            cursor: pointer;
+            display: none;
+            transition: all 0.3s;
+        }
+
+        .copy-text:hover {
+            color: #ffcc00;
+            text-shadow: 0 0 5px #ff9900;
+        }
+
+        .qris-section {
+            text-align: center;
+            margin: 25px 0;
+            position: relative;
+            z-index: 2;
+        }
+
+        .qris-image {
+            width: 200px;
+            height: 200px;
+            margin: 0 auto 15px;
+            border: 2px solid #00ffff;
+            border-radius: 12px;
+            padding: 10px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .qris-image:hover {
+            transform: scale(1.03);
+            box-shadow: 0 0 15px rgba(0, 255, 255, 0.6);
+        }
+
+        .qris-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .panel-list {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+            border: 1px solid #00ffff;
+            position: relative;
+            z-index: 2;
+        }
+
+        .panel-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(0, 255, 255, 0.3);
+        }
+
+        .panel-item:last-child {
+            border-bottom: none;
+        }
+
+        .panel-item span:first-child {
+            color: #ffffff;
+        }
+
+        .panel-item span:last-child {
+            color: #00ff00;
+            font-weight: bold;
+        }
+
+        .button {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            text-align: center;
+            background: linear-gradient(45deg, #00ff00, #00cc00);
+            color: #000;
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: bold;
+            margin: 15px 0;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 2;
+            box-shadow: 0 0 15px rgba(0, 255, 0, 0.5);
+        }
+
+        .button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.8);
+        }
+
+        .contact-button {
+            background: linear-gradient(45deg, #00ffff, #0088ff);
+            box-shadow: 0 0 15px rgba(0, 255, 255, 0.5);
+        }
+
+        .contact-button:hover {
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.8);
+        }
+
+        .bug-section, .bot-section {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+            border: 1px solid #ff00ff;
+            position: relative;
+            z-index: 2;
+        }
+
+        .bug-title, .bot-title {
+            color: #ff00ff;
+            text-align: center;
+            margin-bottom: 15px;
+            text-shadow: 0 0 5px #ff00ff;
+        }
+
+        .bot-pricing {
+            text-align: center;
+            color: #ffffff;
+            margin: 15px 0;
+            font-size: 14px;
+        }
+
+        .info-section {
+            text-align: center;
+            margin: 25px 0 15px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .info-link {
+            color: #00ffff;
+            text-decoration: none;
+            font-size: 14px;
+            word-break: break-all;
+            display: block;
+            margin-top: 10px;
+        }
+
+        .info-link:hover {
+            text-decoration: underline;
+            text-shadow: 0 0 5px #00ffff;
+        }
+
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle var(--duration) ease-in-out infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.2; }
+            50% { opacity: 1; }
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            color: #00ff00;
+            padding: 15px 20px;
+            border-radius: 8px;
+            border-left: 4px solid #00ff00;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+            transform: translateX(150%);
+            transition: transform 0.3s ease;
+            z-index: 1000;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .payment-methods {
+                grid-template-columns: 1fr;
+            }
+            
+            .qris-image {
+                width: 180px;
+                height: 180px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="stars" id="stars"></div>
+    <div class="notification" id="notification">Nomor berhasil disalin!</div>
+    
+    <div class="container">
+        <div class="profile-section">
+            <div class="profile-image">
+                <img src="https://files.catbox.moe/02zs1l.jpg" alt="Profile Space">
+            </div>
+        </div>
+
+        <h1>PAYMENT GATEWAY</h1>
+
+        <div class="section-title">E-WALLET PAYMENT</div>
+        <div class="payment-methods">
+            <div class="payment-item" data-number="081230772772">
+                <div class="payment-logo">
+                    <img src="https://files.catbox.moe/7he3ql.png" alt="DANA">
+                </div>
+                <div>DANA</div>
+                <div class="payment-number">081230772772</div>
+                <div class="copy-text">Salin</div>
+            </div>
+            <div class="payment-item" data-number="081230772772">
+                <div class="payment-logo">
+                    <img src="https://files.catbox.moe/3qf7am.png" alt="GoPay">
+                </div>
+                <div>GoPay</div>
+                <div class="payment-number">081230772772</div>
+                <div class="copy-text">Salin</div>
+            </div>
+            <div class="payment-item" data-number="081230772772">
+                <div class="payment-logo">
+                    <img src="https://files.catbox.moe/0ryn4s.png" alt="OVO">
+                </div>
+                <div>OVO</div>
+                <div class="payment-number">081230772772</div>
+                <div class="copy-text">Salin</div>
+            </div>
+            <div class="payment-item" data-number="All Payment">
+                <div class="payment-logo">
+                    <img src="https://files.catbox.moe/kzs548.png" alt="QRIS">
+                </div>
+                <div>QRIS</div>
+                <div class="payment-number">All Payment</div>
+                <div class="copy-text">Salin</div>
+            </div>
+        </div>
+
+        <div class="qris-section">
+            <div class="section-title">QRIS PAYMENT</div>
+            <div class="qris-image" onclick="window.open('https://files.catbox.moe/k3kt4p.jpg', '_blank')">
+                <img src="https://files.catbox.moe/k3kt4p.jpg" alt="QRIS Code">
+            </div>
+            <p>Klik gambar untuk memperbesar</p>
+        </div>
+
+        <a href="https://wa.me/6281230772772" class="button">Pesan</a>
+
+        <div class="section-title">LIST PANEL PTERODACTYL</div>
+        <div class="panel-list">
+            <div class="panel-item">
+                <span>1GB</span>
+                <span>1K</span>
+            </div>
+            <div class="panel-item">
+                <span>2GB</span>
+                <span>2K</span>
+            </div>
+            <div class="panel-item">
+                <span>3GB</span>
+                <span>3K</span>
+            </div>
+            <div class="panel-item">
+                <span>4GB</span>
+                <span>4K</span>
+            </div>
+            <div class="panel-item">
+                <span>5GB</span>
+                <span>5K</span>
+            </div>
+            <div class="panel-item">
+                <span>UNLI</span>
+                <span>6K</span>
+            </div>
+        </div>
+
+        <div class="section-title">BUY NOKOS? GAS HUBUNGI NOMER INI</div>
+        <a href="https://wa.me/6281230772772" class="button contact-button">Hubungi</a>
+
+        <div class="bug-section">
+            <div class="bug-title">SC BUG WA🥶</div>
+            <a href="https://wa.me/6281230772772" class="button">pencet tulisan ini untuk membeli sc bug wa</a>
+        </div>
+
+        <div class="bot-section">
+            <div class="bot-title">SEWA BOT PUSHKONTAK🤖</div>
+            <div class="bot-pricing">1 hari = 3k, 3 hari = 5k, 7 hari = 8k</div>
+            <a href="https://wa.me/6281230772772" class="button">Pesan</a>
+        </div>
+
+        <div class="info-section">
+            <div class="section-title">ALL INFO STOK & TESTI RELZZY</div>
+            <a href="https://whatsapp.com/channel/0029VbBMt7OFsn0lpou01b2h" class="info-link">https://whatsapp.com/channel/0029VbBMt7OFsn0lpou01b2h</a>
+        </div>
+    </div>
+
+    <script>
+        // Create stars for background
+        const starsContainer = document.getElementById('stars');
+        const starCount = 150;
+
+        for (let i = 0; i < starCount; i++) {
+            const star = document.createElement('div');
+            star.className = 'star';
+            
+            const size = Math.random() * 3;
+            const duration = 2 + Math.random() * 3;
+            
+            star.style.width = `${size}px`;
+            star.style.height = `${size}px`;
+            star.style.left = `${Math.random() * 100}vw`;
+            star.style.top = `${Math.random() * 100}vh`;
+            star.style.setProperty('--duration', `${duration}s`);
+            
+            starsContainer.appendChild(star);
+        }
+
+        // Copy to clipboard functionality
+        const paymentItems = document.querySelectorAll('.payment-item');
+        const notification = document.getElementById('notification');
+
+        paymentItems.forEach(item => {
+            item.addEventListener('click', function() {
+                const copyText = this.querySelector('.copy-text');
+                const number = this.getAttribute('data-number');
+                
+                // Show copy text
+                document.querySelectorAll('.copy-text').forEach(text => {
+                    text.style.display = 'none';
+                });
+                copyText.style.display = 'block';
+                
+                // Add click event to copy text
+                copyText.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    
+                    // Copy to clipboard
+                    navigator.clipboard.writeText(number).then(() => {
+                        // Show notification
+                        notification.textContent = 'Nomor berhasil disalin: ' + number;
+                        notification.classList.add('show');
+                        
+                        setTimeout(() => {
+                            notification.classList.remove('show');
+                        }, 3000);
+                    }).catch(err => {
+                        console.error('Failed to copy: ', err);
+                    });
+                });
+            });
+        });
+
+        // Close copy text when clicking outside
+        document.addEventListener('click', function() {
+            document.querySelectorAll('.copy-text').forEach(text => {
+                text.style.display = 'none';
+            });
+        });
+
+        // Add floating animation to payment items
+        paymentItems.forEach((item, index) => {
+            item.style.animationDelay = `${index * 0.1}s`;
+        });
+    </script>
+</body>
+</html>
